@@ -78,7 +78,7 @@ import UIKit
     }
     
     public var totalValue: Double {
-        return models.reduce(0){$0 + $1.value}
+        return Double(models.reduce(0){$0 + $1.value})
     }
     
     public override init(frame: CGRect) {
@@ -111,7 +111,7 @@ import UIKit
     }
     
     fileprivate func generateSlice(model: PieSliceModel, index: Int, lastEndAngle: CGFloat, totalValue: Double) -> (CGFloat, PieSlice) {
-        let percentage = 1 / (totalValue / model.value)
+        let percentage = 1 / (totalValue / Double(model.value))
         let angle = (Double.pi * 2) * percentage
         let newEndAngle = lastEndAngle + CGFloat(angle)
         
@@ -170,7 +170,7 @@ import UIKit
             return angle.truncatingRemainder(dividingBy: CGFloat.pi * 2)
         }
         
-        let newSlicePercentage = 1 / ((totalValue + model.value) / model.value)
+        let newSlicePercentage = 1 / ((totalValue + Double(model.value)) / Double(model.value))
         let remainingPercentage = 1 - newSlicePercentage
         
         let currentSliceAtIndexEndAngle = index == 0 ? 0 : wrap(angle: slices[index - 1].view.endAngle)
@@ -179,7 +179,7 @@ import UIKit
         var offset = CGFloat.pi * 2 * CGFloat(newSlicePercentage)
         var lastEndAngle = currentSliceAfterIndeStartAngle + offset
         
-        let (_, slice) = generateSlice(model: model, index: index, lastEndAngle: currentSliceAtIndexEndAngle, totalValue: model.value + totalValue)
+        let (_, slice) = generateSlice(model: model, index: index, lastEndAngle: currentSliceAtIndexEndAngle, totalValue: Double(model.value) + totalValue)
         
         container.addSublayer(slice.view)
         slice.view.rotate(angle: slice.view.referenceAngle)
@@ -211,7 +211,7 @@ import UIKit
             
             lastEndAngle = wrap(angle: end)
             
-            slice.data.percentage = 1 / (totalValue / slice.data.model.value)
+            slice.data.percentage = 1 / (totalValue / Double(slice.data.model.value))
         }
     }
     
